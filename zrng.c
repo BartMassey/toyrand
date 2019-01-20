@@ -9,6 +9,7 @@
 struct pool *make_pool(void) {
     struct pool *pool = malloc(sizeof *pool);
     assert(pool);
+    pool->w = 0;
     pool->i = 0;
     int fd = open("/dev/urandom", O_RDONLY, 0);
     if (fd == -1) {
