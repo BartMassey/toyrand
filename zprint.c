@@ -14,6 +14,7 @@ uint32_t buf[NBLOCK];
 int main(int argc, char **argv) {
     uint64_t count = 0;
     int ascii = 0;
+    size_t npool = 0;
 
     argc--, argv++;
     while (argc > 0) {
@@ -29,11 +30,17 @@ int main(int argc, char **argv) {
             continue;
         }
         
+        if (!strcmp(argv[0], "-p") && argc > 1) {
+            npool = atol(argv[1]);
+            argc -= 2, argv += 2;
+            continue;
+        }
+        
         fprintf(stderr, "zprint: usage: zprint [-a] [-n <count]");
         return 1;
     }
 
-    struct pool *pool = make_pool();
+    struct pool *pool = make_pool(npool);
     for (uint64_t j = 0; count == 0 || j < count; j += NBLOCK) {
         int n = NBLOCK;
         if (count != 0 && j + NBLOCK >= count)
@@ -51,5 +58,6 @@ int main(int argc, char **argv) {
             }
         }
     }
+    free_pool(pool);
     return 0;
 }

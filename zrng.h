@@ -1,25 +1,27 @@
 #include <stdint.h>
 
-#define POOL_SIZE 13
+#define DEFAULT_NPOOL 16
 
 struct pool {
     uint64_t w;
-    uint32_t z[POOL_SIZE];
-    uint32_t i;
+    uint32_t *pool;
+    size_t i, npool;
 };
 
-extern struct pool *make_pool(void);
+extern struct pool *make_pool(size_t pool_size);
+
+extern void free_pool(struct pool *pool);
 
 static inline uint32_t zrand32(struct pool *pool) {
-    uint32_t i = pool->i;
-    uint32_t j = i + 1;
-    if (j >= POOL_SIZE)
-        j -= POOL_SIZE;
+    size_t i = pool->i;
+    size_t j = i + 1;
+    if (j >= pool->npool)
+        j = 0;
     uint64_t w = pool->w + 0xb5ad4eceda1ce2a9;
-    uint64_t zi = pool->z[i];
-    uint64_t zj = pool->z[j];
+    uint64_t zi = pool->pool[i];
+    uint64_t zj = pool->pool[j];
     uint32_t r = (zi * zj + w) >> 16;
-    pool->z[i] = r;
+    pool->pool[i] = r;
     pool->w = w;
     pool->i = j;
     return r;
