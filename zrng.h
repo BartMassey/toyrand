@@ -18,7 +18,7 @@ static inline uint32_t zrand32(struct pool *pool) {
     uint64_t w = pool->w + 0xb5ad4eceda1ce2a9;
     uint64_t zi = pool->z[i];
     uint64_t zj = pool->z[j];
-    uint32_t r = ((zi + w) * (zj + w)) >> 32;
+    uint32_t r = (zi * zj + w) >> 16;
     pool->z[i] = r;
     pool->w = w;
     pool->i = j;

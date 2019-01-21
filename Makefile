@@ -12,7 +12,7 @@ zbench: zbench.o zrng.o
 $(OBJS): zrng.h
 
 test: zprint
-	./zprint | dieharder -a -g 200
+	./zprint | dieharder -a -g 200 | tee dieharder.log
 
 clean:
 	-rm -f zprint zbench $(OBJS)
