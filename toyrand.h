@@ -1,18 +1,25 @@
+/*
+ * Copyright © 2019 Bart Massey
+ * [This program is licensed under the "MIT License"]
+ * Please see the file LICENSE in the source
+ * distribution of this software for license terms.
+ */
+
 #include <stdint.h>
 
 #define DEFAULT_NPOOL 16
 
-struct pool {
+struct toyrand_pool {
     uint64_t w;
     uint32_t *pool;
     size_t i, npool;
 };
 
-extern struct pool *make_pool(size_t pool_size);
+extern struct toyrand_pool *toyrand_make_pool(size_t pool_size);
 
-extern void free_pool(struct pool *pool);
+extern void toyrand_free_pool(struct toyrand_pool *pool);
 
-static inline uint32_t zrand32(struct pool *pool) {
+static inline uint32_t toyrand32(struct toyrand_pool *pool) {
     size_t i = pool->i;
     size_t j = i + 1;
     if (j >= pool->npool)

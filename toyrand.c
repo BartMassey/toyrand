@@ -1,16 +1,23 @@
+/*
+ * Copyright © 2019 Bart Massey
+ * [This program is licensed under the "MIT License"]
+ * Please see the file LICENSE in the source
+ * distribution of this software for license terms.
+ */
+
 #include <assert.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "zrng.h"
+#include "toyrand.h"
 
-struct pool *make_pool(size_t npool) {
+struct toyrand_pool *toyrand_make_pool(size_t npool) {
     assert(npool != 1);
     if (npool == 0)
         npool = DEFAULT_NPOOL;
-    struct pool *pool = malloc(sizeof *pool);
+    struct toyrand_pool *pool = malloc(sizeof *pool);
     assert(pool);
     pool->pool = malloc(npool * sizeof *pool->pool);
     assert(pool->pool);
@@ -30,7 +37,7 @@ struct pool *make_pool(size_t npool) {
     return pool;
 }
 
-void free_pool(struct pool *pool) {
+void toyrand_free_pool(struct toyrand_pool *pool) {
     free(pool->pool);
     free(pool);
 }

@@ -1,3 +1,10 @@
+/*
+ * Copyright © 2019 Bart Massey
+ * [This program is licensed under the "MIT License"]
+ * Please see the file LICENSE in the source
+ * distribution of this software for license terms.
+ */
+
 #include <assert.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -5,7 +12,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "zrng.h"
+#include "toyrand.h"
 
 #define NBLOCK 256
 
@@ -36,28 +43,29 @@ int main(int argc, char **argv) {
             continue;
         }
         
-        fprintf(stderr, "zprint: usage: zprint [-a] [-n <count]");
+        fprintf(stderr, "toyprint: usage: "
+                "toyprint [-a] [-n <count>] [-p <npool>]");
         return 1;
     }
 
-    struct pool *pool = make_pool(npool);
+    struct toyrand_pool *pool = toyrand_make_pool(npool);
     for (uint64_t j = 0; count == 0 || j < count; j += NBLOCK) {
         int n = NBLOCK;
         if (count != 0 && j + NBLOCK >= count)
             n = count - j;
         for (int i = 0; i < n; i++)
-            buf[i] = zrand32(pool);
+            buf[i] = toyrand32(pool);
         if (ascii) {
             for (int i = 0; i < n; i++)
                 printf("0x%08x\n", buf[i]);
         } else {
             int result = write(1, (char *) buf, n * sizeof *buf);
             if (result != n * sizeof *buf) {
-                perror("zprint: write");
+                perror("toyprint: write");
                 return -1;
             }
         }
     }
-    free_pool(pool);
+    toyrand_free_pool(pool);
     return 0;
 }

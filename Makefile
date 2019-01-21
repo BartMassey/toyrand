@@ -1,18 +1,25 @@
+# Copyright © 2019 Bart Massey
+# [This program is licensed under the "MIT License"]
+# Please see the file LICENSE in the source
+# distribution of this software for license terms.
+
+NPOOL = 16
+
 CC = gcc
 CFLAGS = -Wall -O4
 
-OBJS = zprint.o zrng.o zbench.o
+OBJS = toyprint.o toyrand.o toybench.o
 
-zprint: zprint.o zrng.o
-	$(CC) $(CFLAGS) -o zprint zprint.o zrng.o
+toyprint: toyprint.o toyrand.o
+	$(CC) $(CFLAGS) -o toyprint toyprint.o toyrand.o
 
-zbench: zbench.o zrng.o
-	$(CC) $(CFLAGS) -o zbench zbench.o zrng.o
+toybench: toybench.o toyrand.o
+	$(CC) $(CFLAGS) -o toybench toybench.o toyrand.o
 
-$(OBJS): zrng.h
+$(OBJS): toyrand.h
 
-test: zprint
-	./zprint | dieharder -a -g 200 | tee dieharder.log
+test: toyprint
+	./toyprint | dieharder -a -g 200 -p $(NPOOL) | tee dieharder.log
 
 clean:
-	-rm -f zprint zbench $(OBJS)
+	-rm -f toyprint toybench $(OBJS)
