@@ -92,10 +92,10 @@ Dieharder, install the Dieharder executable driver (Debian
 package `dieharder`) and then type `make test`. To make
 `toybench`, say `make toybench`.
 
-Installation is currently manual. Once a library is built
-and the library and header are installed in a reasonable
-place, include `toyrand.h` in your C program and link
-against the library.
+To install, check the paths in the `Makefile` and then say
+`make install` with appropriate permissions.  To use,
+include `toyrand.h` in your C program and link against the
+library.
 
 Manual pages are desperately needed.
 
