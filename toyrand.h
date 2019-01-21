@@ -24,11 +24,13 @@ static inline uint32_t toyrand32(struct toyrand_pool *pool) {
     size_t j = i + 1;
     if (j >= pool->npool)
         j = 0;
-    uint64_t w = pool->w + 0xb5ad4eceda1ce2a9;
+    uint64_t w = pool->w;
     uint64_t zi = pool->pool[i];
     uint64_t zj = pool->pool[j];
     uint32_t r = (zi * zj + w) >> 16;
     pool->pool[i] = r;
+    if (j == 0)
+        w += 0xb5ad4eceda1ce2a9;
     pool->w = w;
     pool->i = j;
     return r;
