@@ -8,7 +8,8 @@ INCLUDE_DIR = $(PREFIX)/include
 LIB_DIR = $(PREFIX)/lib
 
 CC = gcc
-CFLAGS = -Wall -O4
+CDEBUG = -O4
+CFLAGS = -Wall $(CDEBUG)
 
 OBJS = toyprint.o toyrand.o toybench.o
 

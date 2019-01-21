@@ -19,6 +19,9 @@ casual games and simulations. Misfeatures and features:
   with occasional "WEAK" responses with the smallest usable
   state size (64 bits). More testing is needed.
 
+* Reasonable C code. No warnings. Testdriver passes
+  `valgrind`. Comments deperately needed.
+
 * Fast-ish: Cost of 1 32x32 multiply, one rotate, one add,
   two 32-bit reads and a 32-bit write per generated variate.
   300M variates per second on my modern box with everything
