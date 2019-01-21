@@ -14,9 +14,10 @@
 #include "toyrand.h"
 
 struct toyrand_pool *toyrand_make_pool(size_t npool) {
-    assert(npool != 1);
     if (npool == 0)
         npool = DEFAULT_NPOOL;
+    else
+        assert(npool >= 2 && (npool & 1) == 0);
     struct toyrand_pool *pool = malloc(sizeof *pool);
     assert(pool);
     pool->pool = malloc(npool * sizeof *pool->pool);
