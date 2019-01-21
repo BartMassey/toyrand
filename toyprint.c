@@ -39,6 +39,11 @@ int main(int argc, char **argv) {
         
         if (!strcmp(argv[0], "-p") && argc > 1) {
             npool = atol(argv[1]);
+            if (npool < 2 || (npool & (npool - 1))) {
+                fprintf(stderr, "toyprint: pool size must be "
+                        "power of 2 greater than 2\n");
+                return 1;
+            }
             argc -= 2, argv += 2;
             continue;
         }
