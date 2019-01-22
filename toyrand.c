@@ -19,10 +19,13 @@ struct toyrand_pool *toyrand_make_pool(size_t npool) {
     else
         /* Pool must be at least two and be a power of two. */
         assert(npool >= 2 && (npool & (npool - 1)) == 0);
+
     struct toyrand_pool *pool = malloc(sizeof *pool);
     assert(pool);
     pool->pool = malloc(npool * sizeof *pool->pool);
     assert(pool->pool);
+
+    pool->npool = npool;
     pool->w = 0;
     pool->i = 0;
     int fd = open("/dev/urandom", O_RDONLY, 0);
