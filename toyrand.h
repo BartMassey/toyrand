@@ -35,3 +35,18 @@ static inline uint32_t toyrand32(struct toyrand_pool *pool) {
     pool->i = j;
     return r;
 }
+
+/* https://lemire.me/blog/2016/06/30/fast-random-shuffling/ */
+static inline uint32_t
+toyrand_randrange32(struct toyrand_pool *pool, uint32_t n) {
+    uint64_t r = toyrand32(pool);
+    uint64_t m = (uint64_t) r * (uint64_t) n;
+    if ((uint32_t) m < n) {
+        uint32_t t = -n % n;
+        while ((uint32_t) m < t) {
+            r = toyrand32(pool);
+            m = (uint64_t) r * (uint64_t) n;
+        }
+    }
+    return m >> 32;
+}

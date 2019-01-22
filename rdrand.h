@@ -76,18 +76,3 @@ rdrand32(void) {
 }
 
 #endif
-
-/* https://lemire.me/blog/2016/06/30/fast-random-shuffling/ */
-static inline uint32_t
-randrange(uint32_t n) {
-    uint32_t r = rdrand32();
-    uint64_t m = (uint64_t) r * (uint64_t) n;
-    if ((uint32_t) m < n) {
-        uint32_t t = -n % n;
-        while ((uint32_t) m < t) {
-            r = rdrand32();
-            m = (uint64_t) r * (uint64_t) n;
-        }
-    }
-    return m >> 32;
-}

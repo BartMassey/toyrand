@@ -25,13 +25,9 @@ int main() {
         printf("%016lx\n", rdrand64_checked());
     printf("\n");
 
-    for (int i = 0; i < 20; i++)
-        printf(" %d", randrange(3));
-    printf("\n\n");
-
     uint32_t x = 0;
     for (int i = 0; i < 10000000; i++)
-        x ^= randrange(~0);
+        x ^= rdrand32();
     printf("%08x\n", x);
     return 0;
 }
