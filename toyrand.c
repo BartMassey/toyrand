@@ -6,12 +6,19 @@
  */
 
 #include <assert.h>
-#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifdef URANDOM
+#include <fcntl.h>
 #include <unistd.h>
+#endif
 
 #include "toyrand.h"
+
+#ifdef RDRAND
+#include "rdrand.h"
+#endif
 
 struct toyrand_pool *toyrand_make_pool(size_t npool) {
     if (npool == 0)
@@ -21,13 +28,25 @@ struct toyrand_pool *toyrand_make_pool(size_t npool) {
         assert(npool >= 2 && (npool & (npool - 1)) == 0);
 
     struct toyrand_pool *pool = malloc(sizeof *pool);
-    assert(pool);
+    if (!pool)
+        return 0;
     pool->pool = malloc(npool * sizeof *pool->pool);
-    assert(pool->pool);
+    if (!pool->pool) {
+        free(pool);
+        return 0;
+    }
 
     pool->npool = npool;
     pool->w = 0;
     pool->i = 0;
+#ifdef RDRAND
+    if (has_rdrand()) {
+        for (int i = 0; i < npool; i++)
+            pool->pool[i] = rdrand32();
+        return pool;
+    }
+#endif
+#ifdef URANDOM
     int fd = open("/dev/urandom", O_RDONLY, 0);
     if (fd == -1) {
         perror("zrng: open /dev/urandom");
@@ -40,6 +59,10 @@ struct toyrand_pool *toyrand_make_pool(size_t npool) {
         exit(1);
     }
     return pool;
+#else
+    toyrand_free_pool(pool);
+    return 0;
+#endif
 }
 
 void toyrand_free_pool(struct toyrand_pool *pool) {

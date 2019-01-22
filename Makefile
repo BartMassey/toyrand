@@ -9,7 +9,11 @@ LIB_DIR = $(PREFIX)/lib
 
 CC = gcc
 CDEBUG = -O4
-CFLAGS = -Wall $(CDEBUG)
+# At least one of these must be currently defined to
+# use toyrand_make_pool(), so that it has a source
+# of random bits.
+DEFINES = -DRDRAND -DURANDOM
+CFLAGS = -Wall $(CDEBUG) $(DEFINES)
 
 OBJS = toyprint.o toyrand.o toybench.o
 
@@ -21,13 +25,18 @@ toybench: toybench.o toyrand.o
 
 $(OBJS): toyrand.h
 
+toyrand.o: rdrand.h
+
+testrdrand: testrdrand.c rdrand.h
+	$(CC) $(CFLAGS) -o testrdrand testrdrand.c
+
 NPOOL = 0
 
 test: toyprint
 	./toyprint | dieharder -a -g 200 -p $(NPOOL) | tee dieharder.log
 
 clean:
-	-rm -f toyprint toybench $(OBJS) libtoyrand.a
+	-rm -f toyprint toybench testrdrand $(OBJS) libtoyrand.a
 
 libtoyrand.a: toyrand.o
 	ar cr libtoyrand.a toyrand.o

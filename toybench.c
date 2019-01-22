@@ -16,6 +16,7 @@ int main(int argc, char **argv) {
     uint64_t count = atol(argv[1]);
     uint32_t result = 0;
     struct toyrand_pool *pool = toyrand_make_pool(0);
+    assert(pool);
     for (uint64_t i = 0; i < count; i++)
         result ^= toyrand32(pool);
     printf("0x%08x\n", result);

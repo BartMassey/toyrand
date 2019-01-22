@@ -54,6 +54,7 @@ int main(int argc, char **argv) {
     }
 
     struct toyrand_pool *pool = toyrand_make_pool(npool);
+    assert(pool);
     for (uint64_t j = 0; count == 0 || j < count; j += NBLOCK) {
         int n = NBLOCK;
         if (count != 0 && j + NBLOCK >= count)
