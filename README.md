@@ -38,11 +38,13 @@ casual games and simulations. Misfeatures and features:
 It is common to need to produce an arbitrary instance of a
 large combinatorial object using a PRNG. Consider shuffling
 a deck of cards: one would like use a PRNG to produce with
-uniform probability any of the 72! possible permutations of
-the deck. Information theory tells us that this would
-require *log2(72!)* (a little less than 226) bits of seed
-and internal state in the PRNG used. Less than that and some
-permutations are provably unreachable by any PRNG method.
+uniform probability any of the 52! possible permutations of
+the decks. Information theory tells us that this would
+require *log2(52!)* (a little less than 226) bits of seed
+and internal state in the PRNG used. (Shuffling two decks
+would require *log2(104!/2\^52) ~ 500* bits if my math is
+right.) Less than that and some permutations are provably
+unreachable by any PRNG method.
 
 This issue is regularly noted in the literature on
 randomization, especially in games and simulations. The
