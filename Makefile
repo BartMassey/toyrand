@@ -12,7 +12,7 @@ CDEBUG = -O4
 # At least one of these must be currently defined to
 # use toyrand_make_pool(), so that it has a source
 # of random bits.
-DEFINES = -DRDRAND -DURANDOM
+DEFINES = -DRDSEED -DRDRAND -DURANDOM
 CFLAGS = -Wall $(CDEBUG) $(DEFINES)
 
 OBJS = toyprint.o toyrand.o toybench.o

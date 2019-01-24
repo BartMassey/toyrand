@@ -39,14 +39,24 @@ struct toyrand_pool *toyrand_make_pool(size_t npool) {
     pool->npool = npool;
     pool->w = 0;
     pool->i = 0;
+#ifdef RDSEED
+    if (has_rdseed()) {
+        fprintf(stderr, "using rdseed\n");
+        for (int i = 0; i < npool; i++)
+            pool->pool[i] = rdseed32();
+        return pool;
+    }
+#endif
 #ifdef RDRAND
     if (has_rdrand()) {
+        fprintf(stderr, "using rdrand\n");
         for (int i = 0; i < npool; i++)
             pool->pool[i] = rdrand32();
         return pool;
     }
 #endif
 #ifdef URANDOM
+    fprintf(stderr, "using urandom\n");
     int fd = open("/dev/urandom", O_RDONLY, 0);
     if (fd == -1) {
         perror("zrng: open /dev/urandom");

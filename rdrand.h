@@ -13,8 +13,6 @@
 #include <assert.h>
 #include <stdint.h>
 
-#ifdef RDRAND
-
 static int
 has_rdrand(void) {
     uint32_t eax, ecx;
@@ -46,33 +44,33 @@ rdrand32(void) {
     return r;
 }
 
-#else
-
-#include <stdlib.h>
-#include <unistd.h>
-
 static int
-has_rdrand(void) {
-    srandom(getpid());
-    return 1;
+has_rdseed(void) {
+    uint32_t eax, ebx;
+    eax = 0x07;
+    asm("cpuid" : "+a" (eax), "=b" (ebx) : : "ecx", "edx");
+    return (ebx >> 18) & 1;
 }
 
 static inline uint64_t
-rdrand64(void) {
-    uint64_t r1 = lrand48();
-    uint64_t r2 = lrand48();
-    uint64_t r3 = lrand48();
-    return (r1 << 33) ^ (r2 << 24) ^ r3;
+rdseed64_checked(void) {
+    uint8_t err;
+    uint64_t r;
+    asm volatile ("rdseed %0; setc %1" : "=r" (r), "=qm" (err) : : "cc");
+    assert(err == 1);
+    return r;
 }
 
 static inline uint64_t
-rdrand64_checked(void) {
-    return rdrand64();
+rdseed64(void) {
+    uint64_t r;
+    asm volatile ("%=: rdseed %0; jnc %=b" : "=r" (r) : : "cc");
+    return r;
 }
 
 static inline uint32_t
-rdrand32(void) {
-    return rdrand64();
+rdseed32(void) {
+    uint32_t r;
+    asm volatile ("%=: rdseed %0; jnc %=b" : "=r" (r) : : "cc");
+    return r;
 }
-
-#endif
