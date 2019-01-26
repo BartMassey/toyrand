@@ -96,9 +96,9 @@ This generator *should not be used* when:
 
 Before building, check the `DEFINES` in the `Makefile` to
 ensure that you have configured for the environment. You
-should choose at least one of `-DRDRAND` and `-DURANDOM`:
-both can be used on an appropriate architecture (`RDRAND`
-will be tried first).
+must choose at least one of `-DRDSEED`, `-DRDRAND`, `-DURANDOM`:
+all can be used on an appropriate architecture, and will be
+tried in the given order.
 
 On a Linux box, type `make`. To make `toyprint` and run
 Dieharder, install the Dieharder executable driver (Debian
