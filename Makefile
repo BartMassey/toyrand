@@ -30,10 +30,10 @@ toyrand.o: rdrand.h
 testrdrand: testrdrand.c rdrand.h
 	$(CC) $(CFLAGS) -o testrdrand testrdrand.c
 
-NPOOL = 0
+# NPOOL = -p 0
 
 test: toyprint
-	./toyprint | dieharder -a -g 200 -p $(NPOOL) | tee dieharder.log
+	./toyprint | dieharder -a -g 200 $(NPOOL) | tee dieharder.log
 
 clean:
 	-rm -f toyprint toybench testrdrand $(OBJS) libtoyrand.a
