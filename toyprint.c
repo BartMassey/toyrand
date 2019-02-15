@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
         }
         
         fprintf(stderr, "toyprint: usage: "
-                "toyprint [-a] [-n <count>] [-p <npool>]");
+                "toyprint [-a] [-n <count>] [-p <npool>]\n");
         return 1;
     }
 
